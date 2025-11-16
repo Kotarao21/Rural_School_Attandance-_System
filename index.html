@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Faculty Login - Smart Attendance</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: url("background.jpg") no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Dark overlay for contrast */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 0;
+    }
+
+    .login-box {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(12px);
+      padding: 40px 30px;
+      width: 380px;
+      box-shadow: 0px 8px 25px rgba(0,0,0,0.3);
+      color: #fff;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .input-group {
+      position: relative;
+      margin: 20px 0;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 12px;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .input-group label {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ddd;
+      font-size: 14px;
+      pointer-events: none;
+      transition: 0.3s ease;
+    }
+
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+      top: -8px;
+      left: 10px;
+      font-size: 12px;
+      color: #4CAF50;
+      background: rgba(0,0,0,0.6);
+      padding: 0 4px;
+      border-radius: 4px;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0 20px;
+      font-size: 14px;
+    }
+
+    .options label {
+      cursor: pointer;
+    }
+
+    .options a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    .options a:hover {
+      text-decoration: underline;
+    }
+
+    .show-pass {
+      margin-top: -10px;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: left;
+      color: #ddd;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(135deg, #4CAF50, #2e8b57);
+      color: white;
+      transition: 0.3s ease;
+    }
+
+    .login-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .error {
+      color: #ff6b6b;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Faculty Login</h2>
+
+    <div class="input-group">
+      <input type="text" id="username" placeholder=" " required>
+      <label for="username">Username</label>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder=" " required>
+      <label for="password">Password</label>
+    </div>
+
+    <div class="show-pass">
+      <input type="checkbox" id="showPassword" onclick="togglePassword()"> Show Password
+    </div>
+
+    <div class="options">
+      <label><input type="checkbox"> Remember Me</label>
+      <a href="#">Forgot Password?</a>
+    </div>
+
+    <button onclick="login()">Login</button>
+    <p id="error" class="error"></p>
+  </div>
+
+  <script>
+    function login() {
+      let user = document.getElementById("username").value;
+      let pass = document.getElementById("password").value;
+
+      if (user === "faculty" && pass === "admin123") {
+        window.location.href = "home.html";
+      } else {
+        document.getElementById("error").innerText = "❌ Invalid login!";
+      }
+    }
+
+    function togglePassword() {
+      let passField = document.getElementById("password");
+      passField.type = passField.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>

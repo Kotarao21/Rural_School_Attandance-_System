@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faculty Dashboard - Smart Attendance</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: url('dashboard-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0; padding: 0;
+  }
+  header {
+    text-align: center;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  #camera-section {
+    display: flex; flex-direction: column; align-items: center; margin: 20px; padding: 20px;
+    background: url('https://images.unsplash.com/photo-1601933470965-cd2d3b7d027d?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+    border-radius: 12px;
+  }
+  #camera-wrapper {
+    width: 500px; height: 350px; border: 4px solid #333; border-radius: 12px;
+    overflow: hidden; position: relative;
+  }
+  #camera {
+    width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; opacity:0.9;
+  }
+  .search-bar { text-align:center; margin: 15px 0; }
+  .search-bar input {
+    width: 250px; padding: 8px 12px; border-radius: 6px; border:1px solid #ccc; font-size:14px;
+  }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 20px; padding: 20px;
+  }
+  .card {
+    background: rgba(255,255,255,0.95); border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    padding: 10px; text-align: center; transition:0.3s; cursor: pointer;
+  }
+  .card:hover { transform: scale(1.05); }
+  .student-emoji { font-size:50px; margin:10px 0; }
+  .name { font-weight:bold; margin:6px 0; }
+  .status { margin:6px 0; font-size:14px; font-weight:bold; }
+  .present { color:green; }
+  .absent { color:red; }
+</style>
+</head>
+<body>
+
+<header>📘 Faculty Dashboard - Smart Attendance</header>
+
+<section id="camera-section">
+  <h2 style="color:white; text-shadow:1px 1px 3px black;">Face Capture Camera</h2>
+  <div id="camera-wrapper">
+    <video id="camera" autoplay playsinline></video>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="card" id="faculty-card" onclick="toggleAttendance('faculty-status')">
+    <div class="student-emoji">👨‍🏫</div>
+    <div class="name">Prof. Ramesh Kumar</div>
+    <div class="status absent" id="faculty-status">Absent</div>
+  </div>
+</section>
+
+<!-- Search Bar -->
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search Name, Class, Roll, Village..." onkeyup="searchStudents()">
+</div>
+
+<section class="grid" id="students"></section>
+
+<script>
+  // Camera access
+  const video = document.getElementById('camera');
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({video:true})
+      .then(stream => { video.srcObject = stream; })
+      .catch(err => { alert("Camera access denied. Please enable camera."); });
+  }
+
+  function toggleAttendance(id){
+    const elem = document.getElementById(id);
+    if(elem.innerText==="Absent"){
+      elem.innerText="Present"; elem.classList.remove("absent"); elem.classList.add("present");
+    } else {
+      elem.innerText="Absent"; elem.classList.remove("present"); elem.classList.add("absent");
+    }
+  }
+
+  // Generate 35 students
+  const studentContainer = document.getElementById("students");
+  const studentNames=[
+    "Amit","Priya","Rahul","Neha","Ravi","Sita","Anil","Sunita","Manoj","Pooja",
+    "Deepak","Radha","Karan","Meena","Vikas","Alok","Renu","Suresh","Anita","Mohan",
+    "Rekha","Naveen","Jyoti","Ajay","Kavita","Vinod","Lata","Rajesh","Savita","Gopal",
+    "Maya","Ashok","Sarita","Santosh","Geeta"
+  ];
+  const classes = [5,6,7,8,9,10];
+  const villages = ["Rampur","Lakhnipur","Sitapur","Gopalganj","Barabanki"];
+
+  studentNames.forEach((name,i)=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.id=`student-${i+1}`;
+    const emoji=i%2===0?"👦":"👧";
+    const cls=classes[Math.floor(Math.random()*classes.length)];
+    const roll=i+1;
+    const village=villages[Math.floor(Math.random()*villages.length)];
+    card.innerHTML=`
+      <div class="student-emoji">${emoji}</div>
+      <div class="name">${name}</div>
+      <div>Class: ${cls}</div>
+      <div>Roll No: ${roll}</div>
+      <div>Village: ${village}</div>
+      <div class="status absent" id="status-${i+1}">Absent</div>
+    `;
+    card.addEventListener('click',()=>toggleAttendance(`status-${i+1}`));
+    studentContainer.appendChild(card);
+  });
+
+  // Search functionality
+  function searchStudents(){
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const cards = document.querySelectorAll("#students .card");
+    cards.forEach(card=>{
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(input) ? "" : "none";
+    });
+  }
+</script>
+
+</body>
+</html>
